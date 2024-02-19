@@ -1,0 +1,22 @@
+one will be used to calculate the number of times hes come to the mess
+so that would ideally be number of days he has come multiplied by the value
+
+and the second would be the leave thingi which i need to sort out
+
+and the last would be the full table i need to display for that month
+
+
+
+to be able to do this, my google sheets needs to look difference, 
+i need to have one sheet for one month and the in that sheet it will have columns
+
+id , name ,times scanned,days come
+
+
+here days come would just be for that day even if he scans once days come will get incrememnted
+and the times scanned will increment everytime he comes 
+
+
+only the times scanned should get incremented so that we need to somehow fix on the node mcu code 
+
+so the hardware part would be a little complex to do somehow i need to sort that out now 
