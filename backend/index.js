@@ -71,7 +71,7 @@ app.post("/leave/:start_date/:end_date/:id", async(req, res) => {
     const sheet = google.sheets({ version: 'v4', auth });
     const response=await sheet.spreadsheets.values.get({
         spreadsheetId,
-        range:"sheet1!A1:Z10000"
+        range:"Sheet1!A1:Z10000"
     });
     let ans=0;
     const value=response.data.values;
