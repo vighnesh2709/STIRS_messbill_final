@@ -6,19 +6,28 @@ import{BrowserRouter, Route,Routes} from 'react-router-dom'
 function App() {
   const [Cost,SetCost]=useState(0);
   return(
-    <div>
-      <button onClick={()=>{
-        window.location.href="/"
-      }}>Landing</button>
-      <button onClick={()=>{
-        window.location.href="/Indv"
-      }}>check Bill</button>
-      <button onClick={()=>{
-        window.location.href="/Leave"
-      }}>Leave</button>
-      <button onClick={()=>{
-        window.location.href="/Month"
-      }}>Monthly Table</button>
+    <div >
+     <nav className="bg-gray-800">
+      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div className="relative flex h-16 items-center justify-between">
+          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+            <div className="hidden sm:ml-6 sm:block">
+              <div className="flex space-x-4">
+                {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
+                <button onClick={() => { window.location.href = "/" }} className="bg-gray-900 text-green-300 rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Landing</button>
+                <button onClick={() => { window.location.href = "/Indv" }} className="text-green-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Check Bill</button>
+                <button onClick={() => { window.location.href = "/Leave" }} className="text-green-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Leave</button>
+                <button onClick={() => { window.location.href = "/Monthy Table" }} className="text-green-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Monthy Table</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Mobile menu, show/hide based on menu state. */}
+      <div className="sm:hidden" id="mobile-menu">
+      </div>
+    </nav>
+
     <BrowserRouter>
 
       <Routes>
