@@ -64,7 +64,7 @@ function IndividualBill({Cost,SetCost}){
         <input id="name" type='text' placeholder='Name' size="md" className='border-2 border-green-200' />
       
         <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', textAlign: 'left' }} htmlFor="id">ID</label>
-        <input id="id" type='text' placeholder='ID' size="md" className='border-2 border-green-200' />
+        <input id="id" type='text' placeholder='ID' size="md" className='border-2 border-green-200 text-black'  />
       
         <br />
         <button onClick={calculate} className='bg-gray-800 py-2 px-2 rounded-md border-2 border-green-100'>calculate</button>

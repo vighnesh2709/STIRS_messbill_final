@@ -99,8 +99,6 @@ app.post("/leave/:start_date/:end_date/:id", async(req, res) => {
 
     res.json({ dayDifference });
 });
-
-
 app.get("/",async(req,res)=>{
     const auth=new google.auth.GoogleAuth({
         credentials:{
@@ -119,6 +117,15 @@ app.get("/",async(req,res)=>{
     const value=response.data.values;
     res.json(value);
 })
-
-app.listen(3020);
+app.post("/test/:name/:id",(req,res)=>{
+    let name=req.params.name;
+    let id=req.params.id;
+    res.json({
+        name: name,
+        id: id
+    })
+})
+app.listen(3020, '0.0.0.0', () => {
+    console.log(`Server is running on http://0.0.0.0:3020`);
+  });
 
