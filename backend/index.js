@@ -88,7 +88,7 @@ app.post("/leave/:start_date/:end_date/:id", async(req, res) => {
     // Use the correct method name: sheet.spreadsheets.values.update
     const result = await sheet.spreadsheets.values.update({
         spreadsheetId,
-        range: `sheet1!E${ans+1}`,
+        range: `sheet1!H${ans+1}`,
         valueInputOption: "RAW",
         resource: {
             values: [[`${dayDifference-2}`]]
@@ -137,7 +137,7 @@ app.post("/test/:name/:id", async (req, res) => {
             range: "sheet1!A1:Z1000"
         });
         const value = response.data.values;
-        let index = value.length ;
+        let index = value.length;
         let op_bit = 0;
 
         for (let i = 0; i < value.length; i++) {
@@ -150,11 +150,11 @@ app.post("/test/:name/:id", async (req, res) => {
 
         if (op_bit != 1) {
             try {
-                const data = [[id, name, 0, 0, 0]];
+                const data = [[id, name, 0, 0, 0, 0, 0, 0]];
 
                 const result = await sheet.spreadsheets.values.update({
                     spreadsheetId,
-                    range: `sheet1!A${index + 1}:E${index + 1}`,
+                    range: `sheet1!A${index + 1}:H${index + 1}`,
                     valueInputOption: "RAW",
                     resource: {
                         values: data
@@ -179,26 +179,26 @@ app.post("/test/:name/:id", async (req, res) => {
                 let data;
 
                 if (time >= 7 * 3600 && time < 8 * 3600) {
-                    old_value = value[index][3];
+                    old_value = parseInt(value[index][3]);
                     new_value = old_value + 1;
                     data = [[,,, new_value, , , ,]];
                 } else if (time > 11 * 3600 + 50 * 60 && time < 13 * 3600 + 30 * 60) {
-                    old_value = value[index][4];
+                    old_value = parseInt(value[index][4]);
                     new_value = old_value + 1;
                     data = [[,,,, new_value, , ,]];
                 } else if (time > 16 * 3600 && time < 17 * 3600) {
-                    old_value = value[index][5];
+                    old_value = parseInt(value[index][5]);
                     new_value = old_value + 1;
                     data = [[,,,,, new_value, ,]];
                 } else {
-                    old_value = value[index][6];
+                    old_value = parseInt(value[index][6]);
                     new_value = old_value + 1;
                     data = [[,,,,,, new_value,]];
                 }
 
                 const result = await sheet.spreadsheets.values.update({
                     spreadsheetId,
-                    range: `sheet1!A${index + 1}:E${index + 1}`,
+                    range: `sheet1!A${index + 1}:H${index + 1}`,
                     valueInputOption: "RAW",
                     resource: {
                         values: data
