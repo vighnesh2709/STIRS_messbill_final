@@ -117,14 +117,111 @@ app.get("/",async(req,res)=>{
     const value=response.data.values;
     res.json(value);
 })
-app.post("/test/:name/:id",(req,res)=>{
-    let name=req.params.name;
-    let id=req.params.id;
-    res.json({
-        name: name,
-        id: id
-    })
-})
+app.post("/test/:name/:id", async (req, res) => {
+    let name = req.params.name;
+    let id = req.params.id;
+
+    const auth = new google.auth.GoogleAuth({
+        credentials: {
+            client_email: clientEmail,
+            private_key: privateKey
+        },
+        scopes: ["https://www.googleapis.com/auth/spreadsheets"]
+    });
+
+    const sheet = google.sheets({ version: "v4", auth });
+
+    try {
+        const response = await sheet.spreadsheets.values.get({
+            spreadsheetId,
+            range: "sheet1!A1:Z1000"
+        });
+        const value = response.data.values;
+        let index = value.length ;
+        let op_bit = 0;
+
+        for (let i = 0; i < value.length; i++) {
+            if (value[i][0] == id) {
+                op_bit = 1;
+                index = i;
+                break;
+            }
+        }
+
+        if (op_bit != 1) {
+            try {
+                const data = [[id, name, 0, 0, 0]];
+
+                const result = await sheet.spreadsheets.values.update({
+                    spreadsheetId,
+                    range: `sheet1!A${index + 1}:E${index + 1}`,
+                    valueInputOption: "RAW",
+                    resource: {
+                        values: data
+                    }
+                });
+
+                console.log("%d cells updated", result.data.updatedCells);
+                res.json(result.data);
+            } catch (err) {
+                console.error("Error:", err);
+                res.json({
+                    msg: "There is an error"
+                });
+            }
+        } else if (op_bit == 1) {
+            try {
+                const d = new Date();
+                let time = d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
+
+                let old_value = 0;
+                let new_value = 0;
+                let data;
+
+                if (time >= 7 * 3600 && time < 8 * 3600) {
+                    old_value = value[index][3];
+                    new_value = old_value + 1;
+                    data = [[,,, new_value, , , ,]];
+                } else if (time > 11 * 3600 + 50 * 60 && time < 13 * 3600 + 30 * 60) {
+                    old_value = value[index][4];
+                    new_value = old_value + 1;
+                    data = [[,,,, new_value, , ,]];
+                } else if (time > 16 * 3600 && time < 17 * 3600) {
+                    old_value = value[index][5];
+                    new_value = old_value + 1;
+                    data = [[,,,,, new_value, ,]];
+                } else {
+                    old_value = value[index][6];
+                    new_value = old_value + 1;
+                    data = [[,,,,,, new_value,]];
+                }
+
+                const result = await sheet.spreadsheets.values.update({
+                    spreadsheetId,
+                    range: `sheet1!A${index + 1}:E${index + 1}`,
+                    valueInputOption: "RAW",
+                    resource: {
+                        values: data
+                    }
+                });
+
+                console.log("%d cells updated", result.data.updatedCells);
+                res.json(result.data);
+            } catch (err) {
+                console.error("Error:", err);
+                res.json({
+                    msg: "There is an error"
+                });
+            }
+        }
+    } catch (err) {
+        console.error("Error:", err);
+        res.json({
+            msg: "There is an error"
+        });
+    }
+});
+
 app.listen(3020, '0.0.0.0', () => {
     console.log(`Server is running on http://0.0.0.0:3020`);
   });
