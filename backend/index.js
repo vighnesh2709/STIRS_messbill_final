@@ -39,7 +39,7 @@ app.post("/calculate/:id/:name",async(req,res)=>{
         }
     }
     if(value[detect][1]==name){
-        res.json(value[detect][8]*200); 
+        res.json(value[detect][8    ]*200); 
     }
     else{
         res.json({
