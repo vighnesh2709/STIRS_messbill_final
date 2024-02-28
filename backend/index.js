@@ -39,7 +39,7 @@ app.post("/calculate/:id/:name",async(req,res)=>{
         }
     }
     if(value[detect][1]==name){
-        res.json(value[detect][3]*200); 
+        res.json(value[detect][8]*200); 
     }
     else{
         res.json({
@@ -58,7 +58,7 @@ app.post("/leave/:start_date/:end_date/:id", async(req, res) => {
     const end = new Date(end_date);
 
     const timeDifference = end - start;
-    const dayDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const dayDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24))-2;
     
     const auth = new google.auth.GoogleAuth({
         credentials:{
@@ -83,15 +83,17 @@ app.post("/leave/:start_date/:end_date/:id", async(req, res) => {
             continue;
         }
     }
-    
+    let old_days=parseInt(value[ans][8]);
+    let updated_days=old_days-dayDifference;
+    const data = [[, , , , , , , dayDifference, updated_days]]; 
     
     // Use the correct method name: sheet.spreadsheets.values.update
     const result = await sheet.spreadsheets.values.update({
         spreadsheetId,
-        range: `sheet1!H${ans+1}`,
+        range: `sheet1!A${ans+1}:I${ans+1}`,
         valueInputOption: "RAW",
         resource: {
-            values: [[`${dayDifference-2}`]]
+            values: data
         }
     });
 
@@ -136,9 +138,11 @@ app.post("/test/:name/:id", async (req, res) => {
             spreadsheetId,
             range: "sheet1!A1:Z1000"
         });
+
         const value = response.data.values;
         let index = value.length;
         let op_bit = 0;
+        let year;
 
         for (let i = 0; i < value.length; i++) {
             if (value[i][0] == id) {
@@ -150,11 +154,28 @@ app.post("/test/:name/:id", async (req, res) => {
 
         if (op_bit != 1) {
             try {
-                const data = [[id, name, 0, 0, 0, 0, 0, 0]];
+                let a = new Date();
+                let month = a.getMonth();
+                year = a.getFullYear();
+                let no_days;
+
+                if (month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11) {
+                    no_days = 31;
+                } else if (month == 1) {
+                    if (year % 4 == 0) {
+                        no_days = 29;
+                    } else {
+                        no_days = 28;
+                    }
+                } else {
+                    no_days = 30;
+                }
+
+                const data = [[id, name, 0, 0, 0, 0, 0, 0, no_days]];
 
                 const result = await sheet.spreadsheets.values.update({
                     spreadsheetId,
-                    range: `sheet1!A${index + 1}:H${index + 1}`,
+                    range: `sheet1!A${index + 1}:I${index + 1}`,
                     valueInputOption: "RAW",
                     resource: {
                         values: data
@@ -173,7 +194,6 @@ app.post("/test/:name/:id", async (req, res) => {
             try {
                 const d = new Date();
                 let time = d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
-
                 let old_value = 0;
                 let new_value = 0;
                 let data;
@@ -198,7 +218,7 @@ app.post("/test/:name/:id", async (req, res) => {
 
                 const result = await sheet.spreadsheets.values.update({
                     spreadsheetId,
-                    range: `sheet1!A${index + 1}:H${index + 1}`,
+                    range: `sheet1!A${index + 1}:I${index + 1}`,
                     valueInputOption: "RAW",
                     resource: {
                         values: data
@@ -221,6 +241,8 @@ app.post("/test/:name/:id", async (req, res) => {
         });
     }
 });
+
+
 
 app.listen(3020, '0.0.0.0', () => {
     console.log(`Server is running on http://0.0.0.0:3020`);
