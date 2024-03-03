@@ -31,15 +31,41 @@ app.post("/calculate/:id/:name",async(req,res)=>{
         range:"sheet1!A1:Z10000"
     });
     const value=response.data.values;
-    let detect=0
-    for(let i=0;i<value.length;i++){
+   
+    function binarysearch(value, id) {
+        let l = 0;
+        let r = value.length - 1;
+        let mid;
+    
+        while (r >= l) {
+            mid = Math.floor((l + r) / 2);
+    
+            if (value[mid][0] == id) {
+                return mid;
+            }
+    
+            if (value[mid][0] > id) {
+                r = mid - 1;
+            } else {
+                l = mid + 1;
+            }
+        }
+    
+        return -1;
+    }
+    
+
+    let detect=binarysearch(value,id)
+    // initally we did linear search now swithced to binary search
+    /*for(let i=0;i<value.length;i++){
         if(value[i][0]==id){
             detect=i;
             break;
         }
-    }
+    }*/
+
     if(value[detect][1]==name){
-        res.json(value[detect][8    ]*200); 
+        res.json(value[detect][8]*200); 
     }
     else{
         res.json({
