@@ -128,6 +128,7 @@ app.post("/leave/:start_date/:end_date/:id", async(req, res) => {
     res.json({ dayDifference });
 });
 app.get("/",async(req,res)=>{
+    let data_array=[0,0,0,0]
     const auth=new google.auth.GoogleAuth({
         credentials:{
             client_email:clientEmail,
@@ -140,10 +141,12 @@ app.get("/",async(req,res)=>{
 
     const response=await sheet.spreadsheets.values.get({
         spreadsheetId,
-        range:"sheet1!A1:Z1000"
+        range:"sheet1!L6:O6"
     });
     const value=response.data.values;
-    res.json(value);
+    data_array=value;
+    res.send(data_array);
+
 })
 app.post("/test/:name/:id", async (req, res) => {
     let name = req.params.name;

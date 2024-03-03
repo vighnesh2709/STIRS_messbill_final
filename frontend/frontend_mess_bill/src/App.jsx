@@ -38,20 +38,36 @@ function App() {
     </div>)
 }
 
-function Landing(){
-  return<div>
-    <br></br>
-    Welcome to the mess menu page
-    <br></br>
-    here are the instructions:
-    <br></br>
-    1. check bill to check the bill of a perticular studnet
-    <br></br>
-    2. leave to admit leaves for the studnet
-    <br></br>
-    3. the monthly bill of the all the studnets so far
-  </div>
+function Landing() {
+  useEffect(()=>{
+    getAverage()
+  },[])
+  const [Avg, setAvg] = useState([0,0,0,0]);
+  return (
+    <div>
+      <p>Breakfast average={Avg[0][0]}</p>
+      <br />
+      <p>Lunch average={Avg[0][1]}</p>
+      <br />
+      <p>Snack average={Avg[0][2]}</p>
+      <br />
+      <p>Dinner average={Avg[0][3]}</p>
+    </div>
+  );
+
+  function getAverage() {
+    setInterval(()=>{
+      fetch('http://localhost:3020/')
+      .then((response) => response.json())
+      .then((data) => {
+        setAvg(data);
+      })
+      .catch((error) => console.error('Error:', error));
+    },1000)
+  
+  }
 }
+
 function IndividualBill({Cost,SetCost}){
   useEffect(()=>{
 
