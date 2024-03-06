@@ -63,7 +63,7 @@ function Landing() {
         setAvg(data);
       })
       .catch((error) => console.error('Error:', error));
-    },1000)
+    },10000)
   
   }
 }
