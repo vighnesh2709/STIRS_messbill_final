@@ -111,7 +111,7 @@ function IndividualBill({Cost,SetCost}){
   const id = document.getElementById("id").value;
   
   fetch(`http://localhost:3020/calculate/${id}/${name}`, {
-  method: 'POST',
+  method: 'GET',
   })
   .then(response => response.json())
   .then(data => {

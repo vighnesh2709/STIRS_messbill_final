@@ -15,7 +15,7 @@ app.use(cors())
 app.use(express.json());
 
 
-app.post("/calculate/:id/:name",async(req,res)=>{
+app.get("/calculate/:id/:name",async(req,res)=>{
     let id=req.params.id;
     let name=req.params.name
     const auth = new google.auth.GoogleAuth({
@@ -32,7 +32,7 @@ app.post("/calculate/:id/:name",async(req,res)=>{
     });
     const value=response.data.values;
    
-    function binarysearch(value, id) {
+    /*function binarysearch(value, id) {
         let l = 0;
         let r = value.length - 1;
         let mid;
@@ -55,22 +55,21 @@ app.post("/calculate/:id/:name",async(req,res)=>{
     }
     
 
-    let detect=binarysearch(value,id)
+    let detect=binarysearch(value,id)*/
     // initally we did linear search now swithced to binary search
-    /*for(let i=0;i<value.length;i++){
+    for(let i=0;i<value.length;i++){
         if(value[i][0]==id){
             detect=i;
             break;
         }
-    }*/
-
+    }
+    
     if(value[detect][1]==name){
-        res.json(value[detect][8]*200); 
+        res.json(value[detect][8]*200);
     }
     else{
-        res.json({
-            msg:"there is an error"
-        })
+        res.json(
+            "there is an error")
     }
 
 })
